@@ -1,0 +1,7 @@
+{
+  "name": "pizza-back",
+  "version": "1",
+  "main": "src/index.js",
+  "author": "Constantine <barr.develop@gmail.com>",
+  "license": "MIT"
+}
