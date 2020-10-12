@@ -26,4 +26,17 @@ const GoodsSchema = new Schema({
   },
 });
 
+GoodsSchema.method({
+  transform() {
+    const transformed = {};
+    const fields = ["id", "name", "description", "price"];
+
+    fields.forEach((field) => {
+      transformed[field] = this[field];
+    });
+
+    return transformed;
+  },
+});
+
 module.exports = model("Goods", GoodsSchema);

@@ -3,20 +3,71 @@ const Order = require("../models/order.model");
 const Currency = require("../models/currency.model");
 const Price = require("../models/price.model");
 const Goods = require("../models/goods.model");
+const ExcRate = require("../models/exchangeRate.model");
+
+function getQueryCurrency(req) {
+  const currencyISO = req.query.currency;
+
+  if (currencyISO) {
+    return Currency.findOne({
+      iso: currencyISO,
+    });
+  }
+
+  return Promise.resolve();
+}
 
 exports.get = async (req, res, next) => {
   try {
-    const orders = await Order.find()
+    const orders = await Order.find({
+      user: req.user._id,
+    })
       .populate({
         path: "totalPrice.currency",
-        select: "name",
+        select: ["name", "iso"],
       })
       .populate({
         path: "goods.id",
         model: "Goods",
         select: ["name", "description"],
       });
-    return res.json({ orders });
+
+    if (!orders.length) {
+      return res.json({ orders: [] });
+    }
+
+    const ordersCurrency = orders[0].totalPrice.currency; // get basic currency
+    const targetCurrency = await getQueryCurrency(req);
+
+    let data = orders.map((item) => item.transform());
+
+    if (targetCurrency && targetCurrency.iso !== ordersCurrency.iso) {
+      const rate = await ExcRate.findOne({
+        from: ordersCurrency._id,
+        to: targetCurrency._id,
+      });
+
+      if (!rate) {
+        throw Error;
+      }
+
+      data = data.map((item) => {
+        return {
+          ...item,
+          totalPrice: {
+            currency: {
+              name: targetCurrency.name,
+              iso: targetCurrency.iso,
+            },
+            value: (
+              parseFloat(item.totalPrice.value) * parseFloat(rate.value)
+            ).toFixed(2),
+          },
+        };
+      });
+    }
+
+    return res.json({ orders: data });
   } catch (error) {
     next(error);
   }

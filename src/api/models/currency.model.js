@@ -15,4 +15,17 @@ const currencySchema = new mongoose.Schema({
   },
 });
 
+currencySchema.method({
+  transform() {
+    const transformed = {};
+    const fields = ["id", "name", "iso"];
+
+    fields.forEach((field) => {
+      transformed[field] = this[field];
+    });
+
+    return transformed;
+  },
+});
+
 module.exports = mongoose.model("Currency", currencySchema);

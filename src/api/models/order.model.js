@@ -55,4 +55,17 @@ const OrderSchema = new mongoose.Schema(
   }
 );
 
+OrderSchema.method({
+  transform() {
+    const transformed = {};
+    const fields = ["id", "goods", "address", "user", "totalPrice"];
+
+    fields.forEach((field) => {
+      transformed[field] = this[field];
+    });
+
+    return transformed;
+  },
+});
+
 module.exports = mongoose.model("Order", OrderSchema);

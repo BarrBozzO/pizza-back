@@ -13,12 +13,11 @@ const router = express.Router();
  */
 router.get("/status", (_, res) => res.send("OK"));
 
-// TODO check route naming
 router.use("/user", userRoutes);
 router.use("/auth", authRoutes);
-router.use("/currency", currencyRoutes);
+router.use("/currencies", currencyRoutes);
 router.use("/goods", goodsRoutes);
-router.use("/order", orderRoutes);
-router.use("/price", priceRoutes);
+router.use("/orders", orderRoutes);
+router.use("/prices", priceRoutes);
 
 module.exports = router;
