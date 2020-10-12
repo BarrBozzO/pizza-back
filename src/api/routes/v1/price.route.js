@@ -1,8 +1,8 @@
-// const express = require("express");
-// const { DELIVERY_PRICE } = require('../../../constants/prices');
+const express = require("express");
+const controller = require("../../controllers/price.controller");
 
-// const router = express.Router();
+const router = express.Router();
 
-// router.route("/").get(controller.get);
+router.route("/").get(controller.get);
 
-// module.exports = router;
+module.exports = router;
