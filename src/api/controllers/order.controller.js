@@ -1,6 +1,8 @@
 const httpStatus = require("http-status");
 const Order = require("../models/order.model");
 const Currency = require("../models/currency.model");
+const Price = require("../models/price.model");
+const Goods = require("../models/goods.model");
 
 exports.get = async (req, res, next) => {
   try {
@@ -28,18 +30,38 @@ exports.create = async (req, res, next) => {
       data.user = req.user._id;
     }
 
-    const USD = await Currency.findOne({
-      iso: "USD",
-    });
+    const [goodsEntities, USD, DELIVERY_PRICE] = await Promise.all([
+      Goods.find({
+        _id: { $in: data.goods.map(({ id }) => id) },
+      }),
+      Currency.findOne({
+        iso: "USD",
+      }),
+      Price.findOne({
+        key: "delivery_price",
+      }),
+    ]);
 
-    if (!USD) {
-      throw Error("Currency not found");
+    if (!goodsEntities.length) {
+      throw new Error("Invalid goods provided!");
     }
 
-    // TODO totalPrice
+    let totalPrice = 0;
+    const goodsCountMap = data.goods.reduce((map, item) => {
+      map[item.id] = item.count;
+      return map;
+    }, {});
+
+    goodsEntities.forEach(({ price, _id }) => {
+      const count = goodsCountMap[_id];
+      totalPrice += parseFloat(price.value) * count;
+    });
+
+    totalPrice += parseFloat(DELIVERY_PRICE.value);
+
     data.totalPrice = {
       currency: USD._id,
-      value: 20,
+      value: totalPrice.toFixed(2),
     };
 
     const order = new Order(data);
