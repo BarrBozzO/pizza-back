@@ -2,6 +2,8 @@
 
 Node.js + Express
 
+https://safe-cliffs-71908.herokuapp.com/v1/status
+
 To start locally:
 
 1. Fill `.env` file using `.env.example`
