@@ -4,8 +4,11 @@
   "main": "src/index.js",
   "author": "Constantine <barr.develop@gmail.com>",
   "license": "MIT",
+  "engines": {
+    "node": "12.x"
+  },
   "scripts": {
-    "start": "cross-env NODE_ENV=production pm2 start ./src/index.js --name \"pizzaApp\"",
+    "start": "cross-env NODE_ENV=production node ./src/index.js",
     "dev": "nodemon ./src/index.js",
     "stop": "pm2 stop \"pizzaApp\"",
     "seed": "node ./seed/index.js"
