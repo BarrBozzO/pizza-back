@@ -13,6 +13,11 @@ const GoodsSchema = new Schema({
     maxlength: 1024,
     trim: true,
   },
+  picture: {
+    type: String,
+    trim: true,
+    required: true,
+  },
   price: {
     currency: {
       type: Schema.Types.ObjectId,
@@ -29,7 +34,7 @@ const GoodsSchema = new Schema({
 GoodsSchema.method({
   transform() {
     const transformed = {};
-    const fields = ["id", "name", "description", "price"];
+    const fields = ["id", "name", "description", "price", "picture"];
 
     fields.forEach((field) => {
       transformed[field] = this[field];

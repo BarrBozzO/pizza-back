@@ -8,7 +8,7 @@
     "start": "cross-env NODE_ENV=production pm2 start ./src/index.js --name \"pizzaApp\"",
     "dev": "nodemon ./src/index.js",
     "stop": "pm2 stop \"pizzaApp\"",
-    "seed": "node ./seed/data/index.js"
+    "seed": "node ./seed/index.js"
   },
   "devDependencies": {
     "mongo-seeding": "^3.4.1",

@@ -15,4 +15,4 @@ const ExchangeRateSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("Rate", ExchangeRateSchema);
+module.exports = mongoose.model("ExchangeRate", ExchangeRateSchema);
