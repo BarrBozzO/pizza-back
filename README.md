@@ -1,6 +1,6 @@
 # pizza-app-back
 
-Node.js + Express
+Node.js + Express + Mongoose + Passport
 
 https://safe-cliffs-71908.herokuapp.com/v1/status
 
